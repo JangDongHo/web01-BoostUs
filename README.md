@@ -1,6 +1,6 @@
-<div align="center">
-
 # boostus
+
+<div align="center">
 
 부스트캠프의 소중한 학습 경험들을 아카이빙 하는 서비스
 
@@ -26,14 +26,14 @@
 
 ### ✔︎ 백엔드
 
-- 프로젝트, 캠퍼들의 이야기, Q&A 도메인 DB 모델링 및 Prisma 시드 데이터 구성 ([#112](https://github.com/boostcampwm2025/web01-BoostUs/pull/112))
-- 공통 API 응답 포맷과 전역 예외 처리 구조 표준화 ([#116](https://github.com/boostcampwm2025/web01-BoostUs/pull/116), [#135](https://github.com/boostcampwm2025/web01-BoostUs/pull/135))
+- 캠퍼들의 이야기 조회 API 구현 ([#117](https://github.com/boostcampwm2025/web01-BoostUs/pull/117), [#128](https://github.com/boostcampwm2025/web01-BoostUs/pull/128))
+- 캠퍼들의 이야기 좋아요 API 구현 ([#265](https://github.com/boostcampwm2025/web01-BoostUs/pull/265))
+- 캠퍼들의 이야기 조회수 증가 API 구현 ([#280](https://github.com/boostcampwm2025/web01-BoostUs/pull/280))
+- 캠퍼들의 이야기 페이지네이션 적용 ([#192](https://github.com/boostcampwm2025/web01-BoostUs/pull/192), [#314](https://github.com/boostcampwm2025/web01-BoostUs/pull/314))
 - RSS 크롤러 서비스 설계 및 구현 ([#167](https://github.com/boostcampwm2025/web01-BoostUs/pull/167))
-- JWT 기반 인증 도입 및 전역 AuthGuard, `@Public`, `@CurrentMember` 인증 흐름 구현 ([#221](https://github.com/boostcampwm2025/web01-BoostUs/pull/221))
-- 캠퍼들의 이야기 조회 API 구현 및 커서 기반 페이지네이션/정렬 안정화 ([#117](https://github.com/boostcampwm2025/web01-BoostUs/pull/117), [#128](https://github.com/boostcampwm2025/web01-BoostUs/pull/128), [#192](https://github.com/boostcampwm2025/web01-BoostUs/pull/192), [#314](https://github.com/boostcampwm2025/web01-BoostUs/pull/314))
-- 캠퍼들의 이야기 좋아요, 조회수 증가, 관리자 삭제 권한 등 사용자 상호작용 API 구현 ([#265](https://github.com/boostcampwm2025/web01-BoostUs/pull/265), [#280](https://github.com/boostcampwm2025/web01-BoostUs/pull/280), [#326](https://github.com/boostcampwm2025/web01-BoostUs/pull/326), [#350](https://github.com/boostcampwm2025/web01-BoostUs/pull/350))
-- RSS 피드 CRUD 및 Velog/Tistory RSS URL 유효성 검증/예외 처리 구현 ([#226](https://github.com/boostcampwm2025/web01-BoostUs/pull/226))
-- 조회수 처리 로직 개선 (동기 UPDATE → Redis 카운터 누적 + Batch Flush) ([#386](https://github.com/boostcampwm2025/web01-BoostUs/pull/386))
+- Velog/Tistory RSS URL 유효성 검증/예외 처리 구현 ([#226](https://github.com/boostcampwm2025/web01-BoostUs/pull/226))
+- JWT 기반 인증 도입 및 전역 인증 상태 관리 구현 ([#221](https://github.com/boostcampwm2025/web01-BoostUs/pull/221))
+- 조회수 증가 로직 Batch 처리 개선 ([#386](https://github.com/boostcampwm2025/web01-BoostUs/pull/386))
 
 ### ✔︎ 인프라
 
@@ -42,10 +42,10 @@
 
 ### ✔︎ 프론트엔드
 
-- JWT 인증 전역 상태 관리(AuthProvider/useAuth) 및 로그인 상태 기반 Header/Login UI 구현 ([#221](https://github.com/boostcampwm2025/web01-BoostUs/pull/221))
-- 캠퍼들의 이야기 RSS 피드 등록 UI 구현 및 블로그 URL → RSS URL 자동 변환 UX 개선 ([#261](https://github.com/boostcampwm2025/web01-BoostUs/pull/261))
-- 캠퍼들의 이야기 상세 페이지 좋아요/공유 사이드바 및 좋아요 상태 연동 구현 ([#265](https://github.com/boostcampwm2025/web01-BoostUs/pull/265))
-- 관리자용 프로젝트/Q&A 삭제 UI 및 삭제 확인 모달 구현 ([#350](https://github.com/boostcampwm2025/web01-BoostUs/pull/350))
+- JWT 인증 전역 상태 관리 및 헤더 로그인 UI 구현 ([#221](https://github.com/boostcampwm2025/web01-BoostUs/pull/221))
+- 캠퍼들의 이야기 RSS 피드 등록 UI 구현 ([#261](https://github.com/boostcampwm2025/web01-BoostUs/pull/261))
+- 캠퍼들의 이야기 상세 페이지 좋아요 UI 구현 ([#265](https://github.com/boostcampwm2025/web01-BoostUs/pull/265))
+- 관리자용 프로젝트/Q&A 수정/삭제 UI 구현 ([#326](https://github.com/boostcampwm2025/web01-BoostUs/pull/326), [#350](https://github.com/boostcampwm2025/web01-BoostUs/pull/350))
 
 ---
 
