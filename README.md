@@ -3,11 +3,10 @@
 <div align="center">
 
 **네이버 부스트캠프의 학습 경험을 아카이빙 하는 서비스**
-2025.12 - 2026.02 · 5인 팀 · 백엔드/인프라
+
+2025.12 - 2026.02 · 5인 팀 · 프론트엔드/백엔드/인프라
 
 </div>
-
-> 현재 서비스는 재정 문제로 인해 운영 종료 상태입니다.
 
 <p align="center">
   <a href="https://www.notion.so/Pole-Position-2c3d4705e03f80f7bba0c5264dc7be36?source=copy_link"><b>📑 팀 노션</b></a>
@@ -18,6 +17,8 @@
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/boostcampwm2025/web01-BoostUs"><b>⭐️ 원본 리포지토리</b></a>
 </p>
+
+> 현재 서비스는 재정 문제로 인해 운영 종료 상태입니다.
 
 ---
 
@@ -103,9 +104,11 @@
 제한된 기간과 팀 상황 안에서 **왜 그렇게 설계했는지**를 남기기 위해 작성했습니다.  
 각 의사결정은 `문제 → 선택 → 근거 → 결과/트레이드오프 → 느낀 점` 순서로 정리했습니다.
 
+<br>
+
 ### 1. 데이터 모델링
 
-<img width="2048" height="1197" alt="image" src="https://github.com/user-attachments/assets/fac11cef-624a-4c2b-b4a0-8279ff4bde03" />
+<img width="1027" height="600" alt="image" src="https://github.com/user-attachments/assets/613f087a-1a6c-4bd7-af84-6e0194f20cf9" />
 
 **설계 원칙**
 
@@ -130,6 +133,8 @@
 - 질문과 답변을 분리해 1:N 구조로 설계했습니다.
 - 질문은 isResolved, 답변은 isAccepted 상태를 가지도록 책임을 분리했습니다.
 - 투표는 별도 테이블로 관리하고 유니크 제약을 통해 중복을 방지했습니다.
+
+<br>
 
 ### 2. Offset에서 Cursor Pagination으로 전환
 
@@ -159,13 +164,18 @@ LIMIT ?;
 **결과와 트레이드오프**
 
 - Full Scan 중심의 조회를 Range Scan 형태로 전환할 수 있는 구조를 만들었습니다.
+- 인덱스를 활용해 Filesort를 제거하여 정렬 비용을 줄였습니다.
 - 데이터 추가/삭제가 발생해도 이전 페이지 기준이 밀리지 않아 중복과 누락 가능성을 줄였습니다.
 - Offset 기반 페이지네이션과 비교했을 때 상대적으로 구현 복잡도가 높았습니다.
+
+<img width="1310" height="165" alt="image" src="https://github.com/user-attachments/assets/d5f73eb5-49af-416e-9596-9a6ea0a3178b" />
 
 **느낀 점**
 
 - 작은 서비스에서는 데이터 규모가 크지 않아, 복잡한 커서 기반 페이지네이션보다 Offset 기반 페이지네이션이 구현과 유지보수 측면에서 더 효율적이라고 느꼈습니다.
 - Offset 기반 페이지네이션의 한계만 잘 이해하고 있다면, 대부분의 ORM에서 제공하는 페이지네이션 기능을 활용하는 것이 더 이득일 수도 있겠다는 생각이 들었습니다.
+
+<br>
 
 ### 3. 조회수 증가 병목 개선
 
@@ -175,11 +185,17 @@ LIMIT ?;
 - 로컬 부하 테스트(1,000 VU)에서 p95 응답 시간이 3.8초까지 증가했습니다.
 - 사용자가 게시글 조회 API를 요청할 때마다 동기적으로 조회수를 증가(`UPDATE`)시키는 것이 병목의 원인이었습니다.
 
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/4b1187ba-4f06-4922-88a5-5dcacb76357d" />
+<br>
+
 **설계**
 
 - 동일 사용자의 중복 조회는 Redis TTL 키로 필터링해 불필요한 증가 요청을 줄였습니다.
 - 조회수 증가분을 Redis에 누적하고, dirty set에 변경된 게시글 ID를 기록한 뒤, 주기적으로 DB에 batch 반영하는 구조로 개선했습니다.
 - 이를 통해 조회 요청과 DB 쓰기를 분리해, 게시글 조회 API가 row lock에 직접 영향을 받지 않도록 했습니다.
+
+<img width="60%" alt="image" src="https://github.com/user-attachments/assets/d2eec8bf-dc39-4b4b-ad50-ab019f90a317" />
+<br>
 
 **결과**
 
@@ -201,6 +217,8 @@ LIMIT ?;
 - 모든 데이터를 실시간으로 처리하는 것이 항상 좋은 것만은 아니라는 점을 배웠습니다.
 - 읽기와 쓰기 쿼리를 분리하는 구조가 중요하다는 점을 배웠습니다.
 - 서로 다른 저장소 간 트랜잭션을 어떻게 관리하고 일관성을 유지할지에 대한 고민이 필요하다는 점도 느꼈습니다.
+
+<br>
 
 ### 4. JWT 기반 인증과 Refresh Token 도입
 
@@ -227,6 +245,8 @@ LIMIT ?;
 - 작은 서비스에서는 Access Token만으로도 충분히 구현할 수 있지만, 보안과 확장성을 고려하면 Refresh Token 구조가 필요하다고 느꼈습니다.
 - 보안성을 위해 토큰의 만료 시간, 저장 방식, 전달 방식까지 함께 고려한 설계가 중요하다는 것을 배웠습니다.
 
+<br>
+
 ### 5. RSS 수집 파이프라인
 
 **문제**
@@ -234,12 +254,30 @@ LIMIT ?;
 - Velog, Tistory 등 플랫폼마다 RSS 구조와 날짜 포맷이 달라 파싱 로직이 복잡해지는 문제가 있었습니다.
 - HTML, CDATA 등 본문 표현 방식이 달라 플랫폼별 분기 코드가 계속 늘어날 수 있는 상황이었습니다.
 
+[Tistory RSS 구조]
+```html
+<title>글 제목</title>
+<pubDate>Fri, 12 Apr 2026 17:30:00 +09:00</pubDate>
+<description>HTML 형태의 본문 내용</description>
+<category>카테고리</category>
+```
+
+[Velog RSS 구조]
+```html
+<title>글 제목</title>
+<pubDate>Fri, 24 May 2026 15:39:23 GMT</pubDate>
+<description>CDATA 형태로 감싸진 본문 내용</description>
+<!-- 카테고리 없음 -->
+```
+
 **설계**
 
 - 수집 과정을 `피드 조회 → RSS 다운로드 → 파싱/정규화 → API 저장` 단계로 분리했습니다.
 - RSS 데이터를 공통 모델로 변환하고, 날짜는 ISO 형식으로 정규화했습니다.
 - 크롤러는 DB에 직접 접근하지 않고 백엔드 API를 통해 저장하도록 구성했습니다.
 - `(feedId, guid)` 기준 Upsert를 적용해 중복 수집을 방지했습니다.
+
+<img width="80%" alt="image" src="https://github.com/user-attachments/assets/386005cc-11c9-4f68-a9b6-8d0761ed3818" />
 
 **결과**
 
