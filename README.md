@@ -69,6 +69,8 @@
 
 ## 🟩 데이터 모델
 
+<img width="2048" height="1197" alt="image" src="https://github.com/user-attachments/assets/fac11cef-624a-4c2b-b4a0-8279ff4bde03" />
+
 **공통 설계 원칙**
 
 - 조회수, 좋아요 수, 추천 수는 매번 집계하지 않고 카운터 컬럼으로 관리해 조회 성능을 높였습니다.
